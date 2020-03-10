@@ -122,3 +122,61 @@
     public static void closePastDueOpportunities( ) {
 
     }
+/////////////////////////////////////////////////////////////////
+//
+// Name: Project 0 B Bravo
+// Author: Breanna
+// Date: 00/00/0000
+// Update: 03/08/2020
+// Update: 03/09/2020
+// Description: Series of apex methods to demonstrate
+// basic understanding of coding concepts.
+//
+/////////////////////////////////////////////////////////////////
+
+public class P0B {
+
+
+//P0B 6    
+    public static void updateAccountSize( ) {
+        //list of accounts where I get the records from the object I'm looking in
+        List<Account> myQueryAccountList =[SELECT Id, Size__c, NumberOfEmployees FROM Account];
+            for (Account i : myQueryAccountList){
+                Integer indvRecord = i.NumberOfEmployees;
+                if (indvRecord >=1 && indvRecord <= 1000){
+                    i.size__c = 'small';
+                } else if (indvRecord >=1001 && indvRecord <=10000){
+                    i.Size__c = 'medium';
+                } else if (indvRecord >10000){
+                    i.Size__c = 'large';
+                }
+                  system.debug (i);  
+                } 
+        update myQueryAccountList;   
+    }
+  
+  //P0B # 7  
+    public static void updateCALeads( ) {
+    
+        //List<Lead> caLead = [SELECT Id, Status, Description FROM Lead WHERE State ='CA'];
+        for(Lead L:[SELECT Status,Description FROM Lead WHERE State ='CA']) {
+            L.Status= 'closed-not converted';
+            L.Description='no longer working in CA';
+            update L;
+        }
+    }
+ 
+ //P0B #8   
+  public static void closePastDueOpportunities() {
+    List<Opportunity> blkOppList = [SELECT Id, StageName, CloseDate FROM Opportunity];
+        for (Opportunity i : blkOppList) {
+            if (i.CloseDate < Date.today() ){
+                i.StageName ='Close Lost';
+            } 
+    }
+    update blkOppList;
+
+
+}    
+    
+}
