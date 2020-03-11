@@ -20,13 +20,13 @@ public class P0B {
             for (Account i : myQueryAccountList){
                 Integer indvRecord = i.NumberOfEmployees;
                 if (indvRecord >=1 && indvRecord <= 1000){
-                    i.size__c = 'small';
+                    i.Size__c = 'small';
                 } else if (indvRecord >=1001 && indvRecord <=10000){
                     i.Size__c = 'medium';
                 } else if (indvRecord >10000){
                     i.Size__c = 'large';
                 }
-                  system.debug (i);  
+    
                 } 
         update myQueryAccountList;   
     }
@@ -34,11 +34,14 @@ public class P0B {
   //P0B # 7  
     public static void updateCALeads( ) {
     
-        //List<Lead> caLead = [SELECT Id, Status, Description FROM Lead WHERE State ='CA'];
-        for(Lead L:[SELECT Status,Description FROM Lead WHERE State ='CA']) {
-            L.Status= 'closed-not converted';
-            L.Description='no longer working in CA';
-            update L;
+        List<Lead> caLead = [SELECT Id, Status, Description FROM Lead WHERE State ='CA'];
+             system.debug(caLead);
+        for(Lead L: caLead) {
+            if(L.Status == 'Closed - Not Converted'){
+               L.Description='no longer working in CA';
+                system.debug(L.Description);
+              }else {}
+            update caLead;
         }
     }
  
@@ -47,8 +50,8 @@ public class P0B {
     List<Opportunity> blkOppList = [SELECT Id, StageName, CloseDate FROM Opportunity];
         for (Opportunity i : blkOppList) {
             if (i.CloseDate < Date.today() ){
-                i.StageName ='Close Lost';
-            } 
+                i.StageName ='Closed Lost';
+            } else {}
     }
     update blkOppList;
 
